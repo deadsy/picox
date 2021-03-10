@@ -8,7 +8,7 @@ target_compile_options(picox
 
 target_compile_definitions(picox
   PRIVATE
-    LOG_USE_COLOR
+    #LOG_USE_COLOR
 )
 
 target_sources(picox

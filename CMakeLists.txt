@@ -18,6 +18,7 @@ add_subdirectory(src)
 target_link_libraries(picox
   PRIVATE
     pico_stdlib
+    pico_multicore
 )
 
 pico_enable_stdio_uart(picox 1)
