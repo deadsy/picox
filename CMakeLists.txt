@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.13)
 # Pull in PICO SDK (must be before project)
 include(pico_sdk_import.cmake)
 
+# We also need PICO EXTRAS
+#include(pico_extras_import.cmake)
+
 project(picox_project C CXX)
 
 set(CMAKE_C_STANDARD 11)
@@ -18,7 +21,8 @@ add_subdirectory(src)
 target_link_libraries(picox
   PRIVATE
     pico_stdlib
-    pico_multicore
+    #pico_audio_i2s
+    #pico_multicore
 )
 
 pico_enable_stdio_uart(picox 1)
