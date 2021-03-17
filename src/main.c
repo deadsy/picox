@@ -5,10 +5,7 @@
 #include "pico/stdio.h"
 
 #define LOG_ENABLE
-#include "log.h"
-
-#include "const.h"
-#include "math.h"
+#include "picox.h"
 
 //-----------------------------------------------------------------------------
 
@@ -25,8 +22,21 @@ int main(void) {
 		x += 0.05f;
 	}
 
+	x = 0.f;
+	while (x < 128.f) {
+		log_info("midi_to_frequency(%f) = %f", x, midi_to_frequency(x));
+		x += 1.f;
+	}
+
+	x = 0.f;
+	while (x < 1.f) {
+		log_info("pow2_frac(%f) = %f", x, pow2(x));
+		x += 0.01f;
+	}
+
 	while (1) {
 	}
+
 	return 0;
 }
 

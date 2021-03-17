@@ -17,6 +17,7 @@ target_sources(picox
     ./lut.c
     ./log.c
     ./math.c
+    ./midi.c
     ./audio.c
     ./i2s.c
 )

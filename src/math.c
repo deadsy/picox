@@ -6,11 +6,7 @@ Math Functions for 32-bit float values.
 */
 //-----------------------------------------------------------------------------
 
-#include <inttypes.h>
-
-#include "const.h"
-#include "lut.h"
-#include "qfmt.h"
+#include "picox.h"
 
 //-----------------------------------------------------------------------------
 // 32-bit float helper macros
@@ -120,16 +116,22 @@ static inline float normalize_radians(float x) {
 	return x;
 }
 
-float xcosf(float x) {
+float cosf(float x) {
 	x = normalize_radians(x);
 	uint32_t xi = (uint32_t) (x * PhaseScale);
-	return q31_to_float(cos_lookup(xi));
+	return q31_to_float(cos_lut(xi));
 }
 
-float xsinf(float x) {
+float sinf(float x) {
 	x = normalize_radians(x);
 	uint32_t xi = QuarterCycle - (uint32_t) (x * PhaseScale);
-	return q31_to_float(cos_lookup(xi));
+	return q31_to_float(cos_lut(xi));
+}
+
+//-----------------------------------------------------------------------------
+
+float pow2(float x) {
+	return q30_to_float(pow2_lut(float_to_q31(x)));
 }
 
 //-----------------------------------------------------------------------------
