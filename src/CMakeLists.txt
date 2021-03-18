@@ -14,9 +14,8 @@ target_compile_definitions(picox
 target_sources(picox
   PRIVATE
     ./main.c
-    ./lut.c
     ./log.c
-    ./math.c
+    ./ggm_math.c
     ./midi.c
     ./audio.c
     ./i2s.c

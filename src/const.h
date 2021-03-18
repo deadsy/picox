@@ -9,7 +9,7 @@
 // Audio Constants.
 
 // AudioSampleFrequency is the sample frequency for audio (Hz)
-#define AudioSampleFrequency (24000U)
+#define AudioSampleFrequency (48000U)
 
 // AudioBufferSize is the number of float samples per audio buffer
 #define AudioBufferSize (256)
@@ -43,7 +43,6 @@
 
 // PhaseScale scales a phase value to a uint32_t phase step value
 #define PhaseScale ((float)FullCycle / Tau)
-//#define PhaseScale (683565275.5764316f)
 
 // SecsPerMin (seconds per minute)
 #define SecsPerMin (60.f)

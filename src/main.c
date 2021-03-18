@@ -1,11 +1,16 @@
 //-----------------------------------------------------------------------------
+/*
 
+Entry Point
+
+*/
 //-----------------------------------------------------------------------------
 
-#include "pico/stdio.h"
-
 #define LOG_ENABLE
-#include "picox.h"
+
+#include <math.h>
+#include "pico/stdio.h"
+#include "ggm.h"
 
 //-----------------------------------------------------------------------------
 
@@ -16,23 +21,15 @@ int main(void) {
 
 	log_info("sine wave demo");
 
-	float x = 0.f;
-	while (x < 4.f * Pi) {
-		log_info("cosf(%f) = %f", x, cosf(x));
-		x += 0.05f;
-	}
+	rms_error("cosf/ggm_cosf", 0.f, 4.f * Tau, 0.01f, cosf, ggm_cosf);
+	benchmark_f0("cos_q15", cos_q15, 2048);
+	benchmark_f1("ggm_cosf", ggm_cosf, 2048);
+	benchmark_f1("cosf", cosf, 2048);
 
-	x = 0.f;
-	while (x < 128.f) {
-		log_info("midi_to_frequency(%f) = %f", x, midi_to_frequency(x));
-		x += 1.f;
-	}
-
-	x = 0.f;
-	while (x < 1.f) {
-		log_info("pow2_frac(%f) = %f", x, pow2(x));
-		x += 0.01f;
-	}
+	rms_error("m2f_slow/m2f_fast", 0.f, 127.f, 0.3f, m2f_slow, m2f_fast);
+	benchmark_f1("m2f_slow", m2f_slow, 2048);
+	benchmark_f1("m2f_fast", m2f_fast, 2048);
+	benchmark_f2("m2f", m2f, 2048);
 
 	while (1) {
 	}
