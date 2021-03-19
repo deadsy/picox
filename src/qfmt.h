@@ -54,6 +54,19 @@ static inline q24 float_to_q24(float x) {
 	return (q24) (x * (float)(1UL << 24));
 }
 
+static inline q24 q24_frac(q24 x) {
+	return (q24) (x & ((1U << 24) - 1));
+}
+
+static inline int q24_int(q24 x) {
+	return (int)(x >> 24);
+}
+
+static inline q24 mul_q24(q24 a, q24 b) {
+	int64_t x = (int64_t) a * (int64_t) b;
+	return (q24) (x >> 24);
+}
+
 //-----------------------------------------------------------------------------
 // Q15.17: -16384 .. 16383.999
 
