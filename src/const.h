@@ -11,7 +11,7 @@
 // AudioSampleFrequency is the sample frequency for audio (Hz)
 #define AudioSampleFrequency (48000U)
 
-// AudioBufferSize is the number of float samples per audio buffer
+// AudioBufferSize is the number of samples per audio buffer
 #define AudioBufferSize (256)
 
 //-----------------------------------------------------------------------------

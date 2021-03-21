@@ -54,6 +54,10 @@ static inline q24 float_to_q24(float x) {
 	return (q24) (x * (float)(1UL << 24));
 }
 
+static inline q24 int_to_q24(int x) {
+	return (q24) (x << 24);
+}
+
 static inline q24 q24_frac(q24 x) {
 	return (q24) (x & ((1U << 24) - 1));
 }
@@ -79,6 +83,15 @@ static inline float q17_to_float(q17 x) {
 
 static inline float q15_to_float(q15 x) {
 	return (float)x *(1.f / (float)(1UL << 15));
+}
+
+static inline q15 float_to_q15(float x) {
+	return (q15) (x * (float)(1UL << 15));
+}
+
+static inline q15 mul_q15(q15 a, q15 b) {
+	int32_t x = (int32_t) a * (int32_t) b;
+	return (q15) (x >> 15);
 }
 
 //-----------------------------------------------------------------------------

@@ -91,42 +91,14 @@ q30 pow2(q31 x) {
 
 // fast float version of pow2 for test purposes.
 float pow2_fast(float x) {
-	x = clamp(x, 0.f, 1.f);
+	x = clampf(x, 0.f, 1.f);
 	return q30_to_float(pow2(float_to_q31(x)));
 }
 
 // slow/accurate version of pow2 using math.h functions
 float pow2_slow(float x) {
-	x = clamp(x, 0.f, 1.f);
+	x = clampf(x, 0.f, 1.f);
 	return powf(2.f, x);
-}
-
-//-----------------------------------------------------------------------------
-// midi to frequency conversion
-
-// k0 = log2f(FrequencyScale) + log2f(440) - (69/12)
-// k1 = 1/12
-#define K0 (326830450U)		// q24
-#define K1 (1398101U)		// q24
-
-// return the 32-bit phase step for the notes frequency
-uint32_t m2f(q24 note) {
-	q24 x = K0 + mul_q24(note, K1);
-	q30 s = pow2(q24_frac(x) << 7);
-	return (uint32_t) (s >> (30 - q24_int(x)));
-}
-
-// fast float version of m2f for test purposes.
-float m2f_fast(float note) {
-	note = clamp(note, 0.f, 127.f);
-	uint32_t dx = m2f(float_to_q24(note));
-	return (float)dx *(1.f / FrequencyScale);
-}
-
-// slow/accurate float version of m2f using math.h functions (~19.8 usecs/call)
-float m2f_slow(float note) {
-	note = clamp(note, 0.f, 127.f);
-	return 440.f * powf(2.f, (note - 69.f) * (1.f / 12.f));
 }
 
 //-----------------------------------------------------------------------------
@@ -134,7 +106,7 @@ float m2f_slow(float note) {
 // Compare a "fast" function against the known-accurate "slow" function
 // Log the error stats to see how good the fast function is.
 
-void rms_error(const char *name, float x0, float x1, float dx, float (*f0)(float), float (*f1)(float)) {
+void rms_error(const char *name, float x0, float x1, float dx, float (*f0)(float), float(*f1)(float)) {
 	float x = x0;
 	float max_err = FLT_MIN;
 	float min_err = FLT_MAX;
