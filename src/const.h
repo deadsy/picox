@@ -12,7 +12,7 @@
 #define AudioSampleFrequency (48000U)
 
 // AudioBufferSize is the number of samples per audio buffer
-#define AudioBufferSize (256)
+#define AudioBufferSize (128)
 
 //-----------------------------------------------------------------------------
 // Derived/Fundanmental Constants (don't modify).

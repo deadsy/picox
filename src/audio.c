@@ -9,7 +9,7 @@
 
 //-----------------------------------------------------------------------------
 
-struct audio_buffer_pool *audio_init(void) {
+struct audio_buffer_pool *audio_init_old(void) {
 
 	struct audio_buffer_pool *producer_pool = NULL;
 
@@ -52,6 +52,32 @@ struct audio_buffer_pool *audio_init(void) {
 	audio_i2s_set_enabled(true);
 
 	return producer_pool;
+}
+
+//-----------------------------------------------------------------------------
+
+static struct i2s_cfg audio_i2s_cfg = {
+	.pio = 0,
+	.sm = 0,
+	.data_pin = 9,
+	.clock_pin_base = 10,
+	.dma_channel = 0,
+};
+
+//-----------------------------------------------------------------------------
+
+int audio_init(struct audio_drv *audio) {
+	int rc = 0;
+
+	// setup the i2s interface
+	rc = i2s_init(&audio->i2s, &audio_i2s_cfg);
+	if (rc != 0) {
+		log_debug("i2s_init failed %d", rc);
+		goto exit;
+	}
+
+ exit:
+	return rc;
 }
 
 //-----------------------------------------------------------------------------

@@ -6,8 +6,8 @@ FILES="
 ./src/const.h
 ./src/ggm.h
 ./src/ggm_math.c
-./src/i2s.c
-./src/i2s.h
+./src/i2s/i2s.c
+./src/i2s/i2s.h
 ./src/log.c
 ./src/log.h
 ./src/main.c

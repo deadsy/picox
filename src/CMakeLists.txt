@@ -18,5 +18,6 @@ target_sources(picox
     ./ggm_math.c
     ./midi.c
     ./audio.c
-    ./i2s.c
 )
+
+add_subdirectory(i2s)

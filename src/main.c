@@ -27,7 +27,7 @@ int main(void) {
 	log_info("%d bytes/buffer", AudioBufferSize);
 	log_info("%.2f ms/buffer", SecsPerAudioBuffer * 1000.f);
 
-	struct audio_buffer_pool *ap = audio_init();
+	struct audio_buffer_pool *ap = audio_init_old();
 	if (ap == NULL) {
 		log_error("");
 		goto exit;

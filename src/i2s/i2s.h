@@ -4,36 +4,34 @@
 */
 //-----------------------------------------------------------------------------
 
-#ifndef AUDIO_H
-#define AUDIO_H
+#ifndef I2S_H
+#define I2S_H
 
 //-----------------------------------------------------------------------------
 
-#include "./i2s/i2s.h"
+#include <inttypes.h>
 
 //-----------------------------------------------------------------------------
 
-#define ALIGN(x) __attribute__ ((aligned (x)))
+struct i2s_cfg {
+	uint8_t pio;		// pio to use (0..1)
+	uint8_t sm;		// pio state machine (0..3)
+	uint8_t data_pin;	// data output
+	uint8_t clock_pin_base;	// base+0 = bit clock, base+1 = channel clock
+	uint8_t dma_channel;	// dma channel
+};
 
-//-----------------------------------------------------------------------------
-
-// The size (in audio samples) of the buffer DMAed from memory to I2S.
-#define AUDIO_DMA_BUFFER_SIZE (4 * AudioBufferSize)
-
-struct audio_drv {
-	struct i2s_drv i2s;
-	int16_t buffer[AUDIO_DMA_BUFFER_SIZE] ALIGN(4);	// dma->i2s buffer
+struct i2s_drv {
+	struct i2s_cfg cfg;	// configuration values
 };
 
 //-----------------------------------------------------------------------------
 // api
 
-struct audio_buffer_pool *audio_init_old(void);
-
-int audio_init(struct audio_drv *audio);
+int i2s_init(struct i2s_drv *i2s, struct i2s_cfg *cfg);
 
 //-----------------------------------------------------------------------------
 
-#endif				// AUDIO_H
+#endif				// I2S_H
 
 //-----------------------------------------------------------------------------

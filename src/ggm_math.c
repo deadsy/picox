@@ -106,7 +106,7 @@ float pow2_slow(float x) {
 // Compare a "fast" function against the known-accurate "slow" function
 // Log the error stats to see how good the fast function is.
 
-void rms_error(const char *name, float x0, float x1, float dx, float (*f0)(float), float(*f1)(float)) {
+void rms_error(const char *name, float x0, float x1, float dx, float (*f0)(float), float (*f1)(float)) {
 	float x = x0;
 	float max_err = FLT_MIN;
 	float min_err = FLT_MAX;
