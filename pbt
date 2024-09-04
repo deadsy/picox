@@ -24,8 +24,12 @@ debug = False
 
 # ------------------------------------------------------------------------------
 
-# supported machine set (match the machine names to the pico sdk)
-machines = {"pimoroni_pico_plus2_rp2350": "Pimoroni Pico+2 (rp2350)"}
+# supported machine set (match the machine names in the pico sdk)
+machines = {
+    "pico": "Raspberry Pi Pico (rp2040)",
+    "pico2": "Raspberry Pi Pico2 (rp2350)",
+    "pimoroni_pico_plus2_rp2350": "Pimoroni Pico+2 (rp2350)",
+}
 
 
 def check_machine(m):
@@ -243,6 +247,30 @@ def cmd_init(argv):
 
     # get the sdk files
     packages["sdk"].init()
+
+    # build directory
+    top = os.getcwd()
+    build_dir = os.path.join(top, "build", machine)
+    if not check_dir(build_dir):
+        pr_info(f"mkdir {build_dir}")
+        os.makedirs(build_dir)
+
+    # <build_dir>/Makefile
+    makefile = os.path.join(build_dir, "Makefile")
+    bld_path = os.path.join(build_dir, "build")
+    src_path = os.path.join(top, "src")
+    with open(makefile, "w", encoding="utf-8") as f:
+        f.write(f"SDK_PATH = {sdk_path}\n")
+        f.write(f"BLD_PATH = {bld_path}\n")
+        f.write(f"SRC_PATH = {src_path}\n\n")
+        f.write(".PHONY: all\n")
+        f.write("all:\n")
+        f.write(f"\tPICO_SDK_PATH=$(SDK_PATH) cmake -GNinja -S $(SRC_PATH) -B $(BLD_PATH) -DPICO_BOARD={machine}\n")
+        f.write("\tninja -C $(BLD_PATH)\n\n")
+        f.write(".PHONY: clean\n")
+        f.write("clean:\n")
+        f.write("\t-rm -rf $(BLD_PATH)\n")
+    pr_info(f"created {makefile}")
 
 
 # ------------------------------------------------------------------------------
