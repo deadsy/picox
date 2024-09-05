@@ -4,7 +4,8 @@ dl
 ext/picotool
 ext/sdk
 ext/extras
+ext/examples
+ext/playground
 ext/tinyusb
 ext/usr
-ext/examples
 ext/.stamp*

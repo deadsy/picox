@@ -16,6 +16,7 @@ clean:
 	-rm -rf $(USB_DIR)
 	-rm -rf $(EXTRAS_DIR)
 	-rm -rf $(EXAMPLES_DIR)
+	-rm -rf $(PLAYGROUND_DIR)
 	-rm .stamp*
 
 #------------------------------------------------------------------------------
@@ -35,7 +36,6 @@ $(SDK_TGZ):
 	mkdir -p $(SDK_DIR)
 	tar -C $(SDK_DIR) -zxf $(SDK_TGZ) --strip-components 1
 	touch $@
-
 
 #------------------------------------------------------------------------------
 # pico extras
@@ -71,6 +71,24 @@ $(EXAMPLES_TGZ):
 .stamp_examples: $(EXAMPLES_TGZ)
 	mkdir -p $(EXAMPLES_DIR)
 	tar -C $(EXAMPLES_DIR) -zxf $(EXAMPLES_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# pico playground
+
+PLAYGROUND_VER = 9930bb0
+PLAYGROUND_URL = https://github.com/raspberrypi/pico-playground/tarball/$(PLAYGROUND_VER)
+PLAYGROUND_FILE = pico-playground-$(PLAYGROUND_VER).tar.gz
+PLAYGROUND_TGZ = $(DL_DIR)/$(PLAYGROUND_FILE)
+PLAYGROUND_DIR = $(TOP)/ext/playground
+
+$(PLAYGROUND_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(PLAYGROUND_URL) -O $(PLAYGROUND_TGZ)
+
+.stamp_playground: $(PLAYGROUND_TGZ)
+	mkdir -p $(PLAYGROUND_DIR)
+	tar -C $(PLAYGROUND_DIR) -zxf $(PLAYGROUND_TGZ) --strip-components 1
 	touch $@
 
 #------------------------------------------------------------------------------

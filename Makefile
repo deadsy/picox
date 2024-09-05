@@ -13,13 +13,15 @@ TINYUSB = $(EXT)/tinyusb
 BLD_PATH = $(TOP)/build
 
 #SRC_PATH = $(TOP)/ext/examples
-SRC_PATH = $(TOP)/old
+SRC_PATH = $(TOP)/ext/playground
+#SRC_PATH = $(TOP)/old
 #SRC_PATH = $(TOP)/src
 
 # pick a board ... (sdk names)
 #BOARD = pico
 #BOARD = pico2
-BOARD = pimoroni_pico_plus2_rp2350
+BOARD = vgaboard
+#BOARD = pimoroni_pico_plus2_rp2350
 
 .PHONY: all
 all: .stamp_ext
