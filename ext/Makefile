@@ -6,13 +6,14 @@ DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
-all: .stamp_sdk .stamp_gnu .stamp_pt
+all: .stamp_sdk .stamp_gnu .stamp_pt .stamp_pio .stamp_usb
 
 .PHONY: clean
 clean:
 	-rm -rf $(USR_DIR)
 	-rm -rf $(SDK_DIR)
 	-rm -rf $(PT_DIR)
+	-rm -rf $(USB_DIR)
 	-rm .stamp*
 
 #------------------------------------------------------------------------------
@@ -71,9 +72,39 @@ $(PT_TGZ):
 		cmake -GNinja \
 		-DCMAKE_INSTALL_PREFIX=$(USR_DIR) \
 		-DPICOTOOL_NO_LIBUSB=1 \
-		-DPICOTOOL_FLAT_INSTALL=1 \
 		-S $(PT_DIR) -B $(PT_BUILD)
 	ninja -C $(PT_BUILD) install
+	touch $@
+
+#------------------------------------------------------------------------------
+# tinyusb
+
+USB_VER = 0.16.0
+USB_URL = https://github.com/hathach/tinyusb/archive/refs/tags/$(USB_VER).tar.gz
+USB_FILE = tinyusb-$(USB_VER).tar.gz
+USB_TGZ = $(DL_DIR)/$(USB_FILE)
+USB_DIR = $(TOP)/ext/tinyusb
+
+$(USB_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(USB_URL) -O $(USB_TGZ)
+
+.stamp_usb: $(USB_TGZ)
+	mkdir -p $(USB_DIR)
+	tar -C $(USB_DIR) -zxf $(USB_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# pioasm
+
+PIO_DIR = $(SDK_DIR)/tools/pioasm
+PIO_BUILD = $(SDK_DIR)/build
+
+.stamp_pio: .stamp_sdk
+	cmake -GNinja \
+		-DCMAKE_INSTALL_PREFIX=$(USR_DIR) \
+		-S $(PIO_DIR) -B $(PIO_BUILD)
+	ninja -C $(PIO_BUILD) install
 	touch $@
 
 #------------------------------------------------------------------------------

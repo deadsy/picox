@@ -7,7 +7,9 @@ SDK_PATH = $(EXT)/sdk
 BLD_PATH = $(TOP)/build
 SRC_PATH = $(TOP)/src
 TOOLS_PATH = $(EXT)/usr/bin
-PICOTOOL_PATH = $(EXT)/usr/picotool
+PICOTOOL = $(EXT)/usr/lib/cmake/picotool
+PIOASM = $(EXT)/usr/lib/cmake/pioasm
+TINYUSB = $(EXT)/tinyusb
 
 # pick a board ... (sdk names)
 #BOARD = pico
@@ -19,7 +21,8 @@ all: .stamp_ext
 	PICO_SDK_PATH=$(SDK_PATH) \
 		cmake -GNinja -S $(SRC_PATH) -B $(BLD_PATH) \
 		-DPICO_TOOLCHAIN_PATH=$(TOOLS_PATH) \
-		-Dpicotool_DIR=$(PICOTOOL_PATH) \
+		-Dpicotool_DIR=$(PICOTOOL) \
+		-DPICO_TINYUSB_PATH=$(TINYUSB) \
 		-DPICO_BOARD=$(BOARD)
 	ninja -C $(BLD_PATH)
 
