@@ -1,0 +1,82 @@
+#------------------------------------------------------------------------------
+# Makefile to get and build external dependencies.
+
+TOP = $(shell realpath ..)
+DL_DIR = $(TOP)/data/downloads
+USR_DIR = $(TOP)/ext/usr
+
+.PHONY: all
+all: .stamp_sdk .stamp_gnu .stamp_pt
+
+.PHONY: clean
+clean:
+	-rm -rf $(USR_DIR)
+	-rm -rf $(SDK_DIR)
+	-rm -rf $(PT_DIR)
+	-rm .stamp_*
+
+foo:
+	echo $(REAL_TOP)
+
+#------------------------------------------------------------------------------
+# pico sdk
+
+SDK_VER = 2.0.0
+SDK_URL = https://github.com/raspberrypi/pico-sdk/releases/download/$(SDK_VER)/pico-sdk-"$(SDK_VER).tar.gz
+SDK_FILE = pico-sdk-$(SDK_VER).tar.gz
+SDK_TGZ = $(DL_DIR)/$(SDK_FILE)
+SDK_DIR = $(TOP)/ext/sdk
+
+$(SDK_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(SDK_URL) -O $(SDK_TGZ)
+
+.stamp_sdk: $(SDK_TGZ)
+	mkdir -p $(SDK_DIR)
+	tar -C $(SDK_DIR) -zxf $(SDK_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# gnu tools
+
+GNU_VER = 13.3.rel1
+GNU_URL = https://developer.arm.com/-/media/Files/downloads/gnu/$(GNU_VER)/binrel/arm-gnu-toolchain-$(GNU_VER)-x86_64-arm-none-eabi.tar.xz
+GNU_FILE = arm-gnu-toolchain-$(GNU_VER)-x86_64-arm-none-eabi.tar.xz
+GNU_TXZ = $(DL_DIR)/$(GNU_FILE)
+
+$(GNU_TXZ):
+	mkdir -p $(DL_DIR)
+	wget $(GNU_URL) -O $(GNU_TXZ)
+
+.stamp_gnu: $(GNU_TXZ)
+	mkdir -p $(USR_DIR)
+	tar -C $(USR_DIR) -Jxf $(GNU_TXZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# picotool
+
+PT_VER = 2.0.0
+PT_URL = https://github.com/raspberrypi/picotool/releases/download/$(PT_VER)/picotool-$(PT_VER).tar.gz
+PT_FILE = picotool-$(PT_VER).tar.gz
+PT_TGZ = $(DL_DIR)/$(PT_FILE)
+PT_DIR = $(TOP)/ext/picotool
+PT_BUILD = $(PT_DIR)/build
+
+$(PT_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(PT_URL) -O $(PT_TGZ)
+
+.stamp_pt: $(PT_TGZ) .stamp_sdk
+	mkdir -p $(PT_DIR)
+	tar -C $(PT_DIR) -zxf $(PT_TGZ) --strip-components 1
+	PICO_SDK_PATH=$(SDK_DIR) \
+		cmake -GNinja \
+		-DCMAKE_INSTALL_PREFIX=$(USR_DIR) \
+		-DPICOTOOL_NO_LIBUSB=1 \
+		-DPICOTOOL_FLAT_INSTALL=1 \
+		-S $(PT_DIR) -B $(PT_BUILD)
+	ninja -C $(PT_BUILD) install
+	touch $@
+
+#------------------------------------------------------------------------------
