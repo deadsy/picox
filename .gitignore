@@ -1,2 +1,7 @@
+build
 data
-sdk
+.stamp*
+ext/picotool
+ext/sdk
+ext/usr
+ext/.stamp*
