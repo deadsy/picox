@@ -6,7 +6,7 @@ DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
-all: .stamp_sdk .stamp_gnu .stamp_pt .stamp_pio .stamp_usb
+all: .stamp_sdk .stamp_extras .stamp_examples .stamp_gnu .stamp_pt .stamp_pio .stamp_usb
 
 .PHONY: clean
 clean:
@@ -14,6 +14,8 @@ clean:
 	-rm -rf $(SDK_DIR)
 	-rm -rf $(PT_DIR)
 	-rm -rf $(USB_DIR)
+	-rm -rf $(EXTRAS_DIR)
+	-rm -rf $(EXAMPLES_DIR)
 	-rm .stamp*
 
 #------------------------------------------------------------------------------
@@ -32,6 +34,43 @@ $(SDK_TGZ):
 .stamp_sdk: $(SDK_TGZ)
 	mkdir -p $(SDK_DIR)
 	tar -C $(SDK_DIR) -zxf $(SDK_TGZ) --strip-components 1
+	touch $@
+
+
+#------------------------------------------------------------------------------
+# pico extras
+
+EXTRAS_VER = 2.0.0
+EXTRAS_URL = https://github.com/raspberrypi/pico-extras/archive/refs/tags/sdk-$(EXTRAS_VER).tar.gz
+EXTRAS_FILE = pico-extras-$(EXTRAS_VER).tar.gz
+EXTRAS_TGZ = $(DL_DIR)/$(EXTRAS_FILE)
+EXTRAS_DIR = $(TOP)/ext/extras
+
+$(EXTRAS_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(EXTRAS_URL) -O $(EXTRAS_TGZ)
+
+.stamp_extras: $(EXTRAS_TGZ)
+	mkdir -p $(EXTRAS_DIR)
+	tar -C $(EXTRAS_DIR) -zxf $(EXTRAS_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# pico examples
+
+EXAMPLES_VER = 7e77a0c
+EXAMPLES_URL = https://github.com/raspberrypi/pico-examples/tarball/$(EXAMPLES_VER)
+EXAMPLES_FILE = pico-examples-$(EXAMPLES_VER).tar.gz
+EXAMPLES_TGZ = $(DL_DIR)/$(EXAMPLES_FILE)
+EXAMPLES_DIR = $(TOP)/ext/examples
+
+$(EXAMPLES_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(EXAMPLES_URL) -O $(EXAMPLES_TGZ)
+
+.stamp_examples: $(EXAMPLES_TGZ)
+	mkdir -p $(EXAMPLES_DIR)
+	tar -C $(EXAMPLES_DIR) -zxf $(EXAMPLES_TGZ) --strip-components 1
 	touch $@
 
 #------------------------------------------------------------------------------
