@@ -2,7 +2,7 @@
 # Makefile to get and build external dependencies.
 
 TOP = $(shell realpath ..)
-DL_DIR = $(TOP)/data/downloads
+DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
@@ -13,10 +13,7 @@ clean:
 	-rm -rf $(USR_DIR)
 	-rm -rf $(SDK_DIR)
 	-rm -rf $(PT_DIR)
-	-rm .stamp_*
-
-foo:
-	echo $(REAL_TOP)
+	-rm .stamp*
 
 #------------------------------------------------------------------------------
 # pico sdk

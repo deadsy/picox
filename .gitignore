@@ -1,5 +1,5 @@
 build
-data
+dl
 .stamp*
 ext/picotool
 ext/sdk
