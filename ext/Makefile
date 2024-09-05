@@ -6,7 +6,7 @@ DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
-all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu .stamp_pt .stamp_pio .stamp_usb
+all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu_arm .stamp_gnu_riscv .stamp_pt .stamp_pio .stamp_usb
 
 .PHONY: clean
 clean:
@@ -92,20 +92,37 @@ $(PLAYGROUND_TGZ):
 	touch $@
 
 #------------------------------------------------------------------------------
-# gnu tools
+# gnu arm tools
 
-GNU_VER = 13.3.rel1
-GNU_URL = https://developer.arm.com/-/media/Files/downloads/gnu/$(GNU_VER)/binrel/arm-gnu-toolchain-$(GNU_VER)-x86_64-arm-none-eabi.tar.xz
-GNU_FILE = arm-gnu-toolchain-$(GNU_VER)-x86_64-arm-none-eabi.tar.xz
-GNU_TXZ = $(DL_DIR)/$(GNU_FILE)
+GNU_ARM_VER = 13.3.rel1
+GNU_ARM_URL = https://developer.arm.com/-/media/Files/downloads/gnu/$(GNU_ARM_VER)/binrel/arm-gnu-toolchain-$(GNU_ARM_VER)-x86_64-arm-none-eabi.tar.xz
+GNU_ARM_FILE = arm-gnu-toolchain-$(GNU_ARM_VER)-x86_64-arm-none-eabi.tar.xz
+GNU_ARM_TXZ = $(DL_DIR)/$(GNU_ARM_FILE)
 
-$(GNU_TXZ):
+$(GNU_ARM_TXZ):
 	mkdir -p $(DL_DIR)
-	wget $(GNU_URL) -O $(GNU_TXZ)
+	wget $(GNU_ARM_URL) -O $(GNU_ARM_TXZ)
 
-.stamp_gnu: $(GNU_TXZ)
+.stamp_gnu_arm: $(GNU_ARM_TXZ)
 	mkdir -p $(USR_DIR)
-	tar -C $(USR_DIR) -Jxf $(GNU_TXZ) --strip-components 1
+	tar -C $(USR_DIR) -Jxf $(GNU_ARM_TXZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# gnu riscv tools
+
+GNU_RISCV_VER = 20230622
+GNU_RISCV_URL = https://buildbot.embecosm.com/job/corev-gcc-ubuntu2204/12/artifact/corev-openhw-gcc-ubuntu2204-$(GNU_RISCV_VER).tar.gz
+GNU_RISCV_FILE = corev-openhw-gcc-ubuntu2204-$(GNU_RISCV_VER).tar.gz
+GNU_RISCV_TGZ = $(DL_DIR)/$(GNU_RISCV_FILE)
+
+$(GNU_RISCV_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(GNU_RISCV_URL) -O $(GNU_RISCV_TGZ)
+
+.stamp_gnu_riscv: $(GNU_RISCV_TGZ)
+	mkdir -p $(USR_DIR)
+	tar -C $(USR_DIR) -zxf $(GNU_RISCV_TGZ) --strip-components 1
 	touch $@
 
 #------------------------------------------------------------------------------

@@ -13,15 +13,23 @@ TINYUSB = $(EXT)/tinyusb
 BLD_PATH = $(TOP)/build
 
 #SRC_PATH = $(TOP)/ext/examples
-SRC_PATH = $(TOP)/ext/playground
+#SRC_PATH = $(TOP)/ext/playground
 #SRC_PATH = $(TOP)/old
-#SRC_PATH = $(TOP)/src
+SRC_PATH = $(TOP)/src
 
-# pick a board ... (sdk names)
+# pick a board
 #BOARD = pico
 #BOARD = pico2
-BOARD = vgaboard
-#BOARD = pimoroni_pico_plus2_rp2350
+#BOARD = vgaboard
+BOARD = pimoroni_pico_plus2_rp2350
+
+COMPILER = pico_riscv_gcc
+#COMPILER = pico_arm_cortex_m0plus_gcc
+#COMPILER = pico_arm_cortex_m33_gcc
+
+#PLATFORM = rp2040
+PLATFORM = rp2350-riscv
+#PLATFORM = rp2350-arm-s
 
 .PHONY: all
 all: .stamp_ext
@@ -32,6 +40,8 @@ all: .stamp_ext
 		-Dpicotool_DIR=$(PICOTOOL) \
 		-Dpioasm_DIR=$(PIOASM) \
 		-DPICO_TINYUSB_PATH=$(TINYUSB) \
+		-DPICO_PLATFORM=$(PLATFORM) \
+		-DPICO_COMPILER=$(COMPILER) \
 		-DPICO_BOARD=$(BOARD)
 	ninja -C $(BLD_PATH)
 
