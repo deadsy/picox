@@ -6,7 +6,7 @@ DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
-all: .stamp_sdk .stamp_extras .stamp_examples .stamp_gnu .stamp_pt .stamp_pio .stamp_usb
+all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu .stamp_pt .stamp_pio .stamp_usb
 
 .PHONY: clean
 clean:
@@ -125,8 +125,8 @@ $(PT_TGZ):
 .stamp_pt: $(PT_TGZ) .stamp_sdk
 	mkdir -p $(PT_DIR)
 	tar -C $(PT_DIR) -zxf $(PT_TGZ) --strip-components 1
-	PICO_SDK_PATH=$(SDK_DIR) \
-		cmake -GNinja \
+	cmake -GNinja \
+		-DPICO_SDK_PATH=$(SDK_DIR) \
 		-DCMAKE_INSTALL_PREFIX=$(USR_DIR) \
 		-DPICOTOOL_NO_LIBUSB=1 \
 		-S $(PT_DIR) -B $(PT_BUILD)
