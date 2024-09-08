@@ -12,10 +12,8 @@ TINYUSB = $(EXT)/tinyusb
 
 BLD_PATH = $(TOP)/build
 
-#SRC_PATH = $(TOP)/ext/examples
-#SRC_PATH = $(TOP)/ext/playground
-#SRC_PATH = $(TOP)/old
-SRC_PATH = $(TOP)/src
+SRC_PATH = $(TOP)/app0
+#SRC_PATH = $(TOP)/app1
 
 # pick a board
 #BOARD = pico
@@ -23,10 +21,12 @@ SRC_PATH = $(TOP)/src
 #BOARD = vgaboard
 BOARD = pimoroni_pico_plus2_rp2350
 
+# pick a compiler
 COMPILER = pico_riscv_gcc
 #COMPILER = pico_arm_cortex_m0plus_gcc
 #COMPILER = pico_arm_cortex_m33_gcc
 
+# pick a platform
 #PLATFORM = rp2040
 PLATFORM = rp2350-riscv
 #PLATFORM = rp2350-arm-s
