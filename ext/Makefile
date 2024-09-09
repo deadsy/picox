@@ -31,7 +31,7 @@ $(SDK_TGZ):
 	mkdir -p $(DL_DIR)
 	wget $(SDK_URL) -O $(SDK_TGZ)
 
-.stamp_sdk: $(SDK_TGZ) .stamp_usb .stamp_tls
+.stamp_sdk: $(SDK_TGZ) .stamp_usb .stamp_tls .stamp_lwip .stamp_bt .stamp_cyw
 	mkdir -p $(SDK_DIR)
 	tar -C $(SDK_DIR) -zxf $(SDK_TGZ) --strip-components 1
 	touch $@
@@ -150,7 +150,7 @@ $(PT_TGZ):
 	touch $@
 
 #------------------------------------------------------------------------------
-# tinyusb
+# tinyusb (extract to sdk directory)
 
 USB_VER = 4232642
 USB_URL = https://github.com/hathach/tinyusb/tarball/$(USB_VER)
@@ -168,7 +168,7 @@ $(USB_TGZ):
 	touch $@
 
 #------------------------------------------------------------------------------
-# mbed tls
+# mbed tls (extract to sdk directory)
 
 TLS_VER = 5a764e5
 TLS_URL = https://github.com/Mbed-TLS/mbedtls/tarball/$(TLS_VER)
@@ -183,6 +183,60 @@ $(TLS_TGZ):
 .stamp_tls: $(TLS_TGZ)
 	mkdir -p $(TLS_DIR)
 	tar -C $(TLS_DIR) -zxf $(TLS_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# lwip (extract to sdk directory)
+
+LWIP_VER = 0a0452b
+LWIP_URL = https://github.com/lwip-tcpip/lwip/tarball/$(LWIP_VER)
+LWIP_FILE = lwip-$(LWIP_VER).tar.gz
+LWIP_TGZ = $(DL_DIR)/$(LWIP_FILE)
+LWIP_DIR = $(SDK_DIR)/lib/lwip
+
+$(LWIP_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(LWIP_URL) -O $(LWIP_TGZ)
+
+.stamp_lwip: $(LWIP_TGZ)
+	mkdir -p $(LWIP_DIR)
+	tar -C $(LWIP_DIR) -zxf $(LWIP_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# btstack (extract to sdk directory)
+
+BT_VER = 2b49e57
+BT_URL = https://github.com/bluekitchen/btstack/tarball/$(BT_VER)
+BT_FILE = btstack-$(BT_VER).tar.gz
+BT_TGZ = $(DL_DIR)/$(BT_FILE)
+BT_DIR = $(SDK_DIR)/lib/btstack
+
+$(BT_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(BT_URL) -O $(BT_TGZ)
+
+.stamp_bt: $(BT_TGZ)
+	mkdir -p $(BT_DIR)
+	tar -C $(BT_DIR) -zxf $(BT_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# cyw43 driver (extract to sdk directory)
+
+CYW_VER = faf3638
+CYW_URL = https://github.com/georgerobotics/cyw43-driver/tarball/$(CYW_VER)
+CYW_FILE = cyw43-driver-$(CYW_VER).tar.gz
+CYW_TGZ = $(DL_DIR)/$(CYW_FILE)
+CYW_DIR = $(SDK_DIR)/lib/cyw43-driver
+
+$(CYW_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(CYW_URL) -O $(CYW_TGZ)
+
+.stamp_cyw: $(CYW_TGZ)
+	mkdir -p $(CYW_DIR)
+	tar -C $(CYW_DIR) -zxf $(CYW_TGZ) --strip-components 1
 	touch $@
 
 #------------------------------------------------------------------------------
