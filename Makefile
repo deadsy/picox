@@ -22,14 +22,14 @@ SRC_PATH = $(TOP)/app0
 BOARD = pimoroni_pico_plus2_rp2350
 
 # pick a compiler
-COMPILER = pico_riscv_gcc
+#COMPILER = pico_riscv_gcc
 #COMPILER = pico_arm_cortex_m0plus_gcc
-#COMPILER = pico_arm_cortex_m33_gcc
+COMPILER = pico_arm_cortex_m33_gcc
 
 # pick a platform
 #PLATFORM = rp2040
-PLATFORM = rp2350-riscv
-#PLATFORM = rp2350-arm-s
+#PLATFORM = rp2350-riscv
+PLATFORM = rp2350-arm-s
 
 .PHONY: all
 all: .stamp_ext

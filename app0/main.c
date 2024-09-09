@@ -49,15 +49,12 @@ static char *itoa(int x, char *s) {
 	if (x < 0) {
 		s[i++] = '-';
 	}
-	s[i] = 0;
-	i--;
+	s[i--] = 0;
 	int j = 0;
 	while (j < i) {
 		char tmp = s[j];
-		s[j] = s[i];
-		s[i] = tmp;
-		j++;
-		i--;
+		s[j++] = s[i];
+		s[i--] = tmp;
 	}
 	return s;
 }
@@ -104,6 +101,9 @@ static void mem_display8(void *ptr, unsigned n) {
 static void picoMon(void) {
 	puts("pico mon 1.0");
 
+	put_dec(987654321);
+	con_puts("\r\n");
+
 	put_dec(-1234);
 	con_puts("\r\n");
 
@@ -132,9 +132,9 @@ int main() {
 
 	while (1) {
 		gpio_put(LED_PIN, 1);
-		sleep_ms(50);
+		sleep_ms(250);
 		gpio_put(LED_PIN, 0);
-		sleep_ms(50);
+		sleep_ms(250);
 	}
 
 	return 0;
