@@ -6,6 +6,5 @@ ext/sdk
 ext/extras
 ext/examples
 ext/playground
-ext/tinyusb
 ext/usr
 ext/.stamp*

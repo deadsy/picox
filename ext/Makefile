@@ -6,14 +6,13 @@ DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
-all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu_arm .stamp_gnu_riscv .stamp_pt .stamp_pio .stamp_usb
+all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu_arm .stamp_gnu_riscv .stamp_pt .stamp_pio
 
 .PHONY: clean
 clean:
 	-rm -rf $(USR_DIR)
 	-rm -rf $(SDK_DIR)
 	-rm -rf $(PT_DIR)
-	-rm -rf $(USB_DIR)
 	-rm -rf $(EXTRAS_DIR)
 	-rm -rf $(EXAMPLES_DIR)
 	-rm -rf $(PLAYGROUND_DIR)
@@ -32,7 +31,7 @@ $(SDK_TGZ):
 	mkdir -p $(DL_DIR)
 	wget $(SDK_URL) -O $(SDK_TGZ)
 
-.stamp_sdk: $(SDK_TGZ)
+.stamp_sdk: $(SDK_TGZ) .stamp_usb .stamp_tls
 	mkdir -p $(SDK_DIR)
 	tar -C $(SDK_DIR) -zxf $(SDK_TGZ) --strip-components 1
 	touch $@
@@ -153,11 +152,11 @@ $(PT_TGZ):
 #------------------------------------------------------------------------------
 # tinyusb
 
-USB_VER = 0.16.0
-USB_URL = https://github.com/hathach/tinyusb/archive/refs/tags/$(USB_VER).tar.gz
+USB_VER = 4232642
+USB_URL = https://github.com/hathach/tinyusb/tarball/$(USB_VER)
 USB_FILE = tinyusb-$(USB_VER).tar.gz
 USB_TGZ = $(DL_DIR)/$(USB_FILE)
-USB_DIR = $(TOP)/ext/tinyusb
+USB_DIR = $(SDK_DIR)/lib/tinyusb
 
 $(USB_TGZ):
 	mkdir -p $(DL_DIR)
@@ -166,6 +165,24 @@ $(USB_TGZ):
 .stamp_usb: $(USB_TGZ)
 	mkdir -p $(USB_DIR)
 	tar -C $(USB_DIR) -zxf $(USB_TGZ) --strip-components 1
+	touch $@
+
+#------------------------------------------------------------------------------
+# mbed tls
+
+TLS_VER = 5a764e5
+TLS_URL = https://github.com/Mbed-TLS/mbedtls/tarball/$(TLS_VER)
+TLS_FILE = mbedtls-$(TLS_VER).tar.gz
+TLS_TGZ = $(DL_DIR)/$(TLS_FILE)
+TLS_DIR = $(SDK_DIR)/lib/mbedtls
+
+$(TLS_TGZ):
+	mkdir -p $(DL_DIR)
+	wget $(TLS_URL) -O $(TLS_TGZ)
+
+.stamp_tls: $(TLS_TGZ)
+	mkdir -p $(TLS_DIR)
+	tar -C $(TLS_DIR) -zxf $(TLS_TGZ) --strip-components 1
 	touch $@
 
 #------------------------------------------------------------------------------

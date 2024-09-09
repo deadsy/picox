@@ -8,7 +8,6 @@ EXTRAS_PATH = $(EXT)/extras
 TOOLS_PATH = $(EXT)/usr/bin
 PICOTOOL = $(EXT)/usr/lib/cmake/picotool
 PIOASM = $(EXT)/usr/lib/cmake/pioasm
-TINYUSB = $(EXT)/tinyusb
 
 BLD_PATH = $(TOP)/build
 
@@ -39,7 +38,6 @@ all: .stamp_ext
 		-DPICO_TOOLCHAIN_PATH=$(TOOLS_PATH) \
 		-Dpicotool_DIR=$(PICOTOOL) \
 		-Dpioasm_DIR=$(PIOASM) \
-		-DPICO_TINYUSB_PATH=$(TINYUSB) \
 		-DPICO_PLATFORM=$(PLATFORM) \
 		-DPICO_COMPILER=$(COMPILER) \
 		-DPICO_BOARD=$(BOARD)
