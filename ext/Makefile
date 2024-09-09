@@ -23,7 +23,7 @@ clean:
 # pico sdk
 
 SDK_VER = 2.0.0
-SDK_URL = https://github.com/raspberrypi/pico-sdk/releases/download/$(SDK_VER)/pico-sdk-"$(SDK_VER).tar.gz
+SDK_URL = https://github.com/raspberrypi/pico-sdk/releases/download/$(SDK_VER)/pico-sdk-$(SDK_VER).tar.gz
 SDK_FILE = pico-sdk-$(SDK_VER).tar.gz
 SDK_TGZ = $(DL_DIR)/$(SDK_FILE)
 SDK_DIR = $(TOP)/ext/sdk
