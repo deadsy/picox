@@ -8,6 +8,9 @@ USR_DIR = $(TOP)/ext/usr
 .PHONY: all
 all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu_arm .stamp_gnu_riscv .stamp_pt .stamp_pio
 
+.PHONY: tiny_go
+tiny_go: .stamp_tgo
+
 .PHONY: clean
 clean:
 	-rm -rf $(USR_DIR)
@@ -250,6 +253,22 @@ PIO_BUILD = $(SDK_DIR)/build
 		-DCMAKE_INSTALL_PREFIX=$(USR_DIR) \
 		-S $(PIO_DIR) -B $(PIO_BUILD)
 	ninja -C $(PIO_BUILD) install
+	touch $@
+
+#------------------------------------------------------------------------------
+# tiny go
+
+TGO_VER = 0.33.0
+TGO_URL = https://github.com/tinygo-org/tinygo/releases/download/v$(TGO_VER)/tinygo_$(TGO_VER)_amd64.deb
+TGO_FILE = tinygo_$(TGO_VER)_amd64.deb
+TGO_DEB = $(DL_DIR)/$(TGO_FILE)
+
+$(TGO_DEB):
+	mkdir -p $(DL_DIR)
+	wget $(TGO_URL) -O $(TGO_DEB)
+
+.stamp_tgo: $(TGO_DEB)
+	sudo dpkg -i $(TGO_DEB)
 	touch $@
 
 #------------------------------------------------------------------------------

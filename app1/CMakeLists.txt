@@ -9,23 +9,32 @@ set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
-add_executable(audio_test
+set(TARGET_NAME audio_test)
+
+add_executable(${TARGET_NAME}
     main.c
 )
 
-target_link_libraries(audio_test PRIVATE
+target_compile_options(${TARGET_NAME} PRIVATE
+  -Wall
+#  -Wextra
+#  -Wstrict-prototypes
+#  -Werror
+)
+
+target_link_libraries(${TARGET_NAME} PRIVATE
   pico_stdlib
   pico_audio_i2s
 )
 
-target_compile_definitions(audio_test PRIVATE
+target_compile_definitions(${TARGET_NAME} PRIVATE
   # compile time configuration of I2S
   PICO_AUDIO_I2S_MONO_INPUT=1
   #define for our example code
   USE_AUDIO_I2S=1
 )
 
-pico_enable_stdio_uart(audio_test 1)
+pico_enable_stdio_uart(${TARGET_NAME} 1)
 
 # create map/bin/hex/uf2 file in addition to ELF.
-pico_add_extra_outputs(audio_test)
+pico_add_extra_outputs(${TARGET_NAME})

@@ -113,7 +113,7 @@ static void picoMon(void) {
 
 //-----------------------------------------------------------------------------
 
-int main() {
+int main(void) {
 
 	const uint LED_PIN = 25;
 	gpio_init(LED_PIN);

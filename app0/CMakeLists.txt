@@ -10,16 +10,25 @@ set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
-add_executable(led_blink
+set(TARGET_NAME led_blink)
+
+add_executable(${TARGET_NAME}
     main.c
 )
 
-target_link_libraries(led_blink PRIVATE
+target_compile_options(${TARGET_NAME} PRIVATE
+  -Wall
+  -Wextra
+  -Wstrict-prototypes
+  -Werror
+)
+
+target_link_libraries(${TARGET_NAME} PRIVATE
   pico_stdlib
 )
 
-#pico_enable_stdio_usb(led_blink 1)
-pico_enable_stdio_uart(led_blink 1)
+#pico_enable_stdio_usb(${TARGET_NAME} 1)
+pico_enable_stdio_uart(${TARGET_NAME} 1)
 
 # create map/bin/hex/uf2 file in addition to ELF.
-pico_add_extra_outputs(led_blink)
+pico_add_extra_outputs(${TARGET_NAME})
