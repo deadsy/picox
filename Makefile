@@ -11,8 +11,11 @@ PIOASM = $(EXT)/usr/lib/cmake/pioasm
 
 BLD_PATH = $(TOP)/build
 
-SRC_PATH = $(TOP)/app0
-#SRC_PATH = $(TOP)/app1
+
+#SRC_PATH = $(TOP)/app0 # blink led, serial output
+#SRC_PATH = $(TOP)/app1 # blink led, serial output, i2s output
+#SRC_PATH = $(TOP)/app2 # tinygo led blinker
+SRC_PATH = $(TOP)/app3 # pio led blinker
 
 # pick a board
 #BOARD = pico
@@ -33,6 +36,7 @@ PLATFORM = rp2350-arm-s
 .PHONY: all
 all: .stamp_ext
 	cmake -GNinja -S $(SRC_PATH) -B $(BLD_PATH) \
+		-DCOMMON_PATH=$(TOP)/common \
 		-DPICO_SDK_PATH=$(SDK_PATH) \
 		-DPICO_EXTRAS_PATH=$(EXTRAS_PATH) \
 		-DPICO_TOOLCHAIN_PATH=$(TOOLS_PATH) \
