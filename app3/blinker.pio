@@ -6,9 +6,8 @@
 .pio_version 0 // only requires PIO version 0
 
 .program blinker
-    set pindirs, 1   ; Set pin to output
 again:
-    set pins, 1 [1]  ; Drive pin high and then delay for one cycle
-    set pins, 0      ; Drive pin low
-    jmp again        ; Set PC to label `again`
+    set pins, 1 [2]    ; Drive pin high and then delay for one cycle
+    set pins, 0 [1]    ; Drive pin low
+    jmp again          ; Set PC to label `again`
 

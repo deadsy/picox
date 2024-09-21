@@ -16,57 +16,54 @@ PIO Code Testing and Experiments
 
 //-----------------------------------------------------------------------------
 
-#if 0
-
-static int appx_main(void) {
+static int setup_pio(const pio_program_t * program, PIO * pio, uint * sm, uint * offset, uint pin, uint16_t divisor) {
 	log_info("%s()", __func__);
-	int rc = 0;
 
-	PIO pio = pio0;
-
-	rc = pio_add_program(pio, &blinker_program);
-	if (rc != 0) {
-		goto exit;
+	// load the program on a free pio and state machine
+	if (!pio_claim_free_sm_and_add_program(program, pio, sm, offset)) {
+		return -1;
 	}
-	// setup the clock divider
-	pio->sm[0].clkdiv = (uint32_t) (2.5f * (1 << 16));
+	log_info("using pio%d[%d] @ offset %d", PIO_NUM(*pio), *sm, *offset);
 
-	// setup the pin mapping
-	pio->sm[0].pinctrl = (1 << PIO_SM0_PINCTRL_SET_COUNT_LSB) | (0 << PIO_SM0_PINCTRL_SET_BASE_LSB);
-	gpio_set_function(0, pio_get_funcsel(pio));
+	// Set this pin's GPIO function (connect PIO to the pad)
+	pio_gpio_init(*pio, pin);
 
-	// start the state machine
-	hw_set_bits(&pio->ctrl, 1 << (PIO_CTRL_SM_ENABLE_LSB + 0));
+	// Set the pin direction to output with the PIO
+	pio_sm_set_consecutive_pindirs(*pio, *sm, pin, 1, true);
 
- exit:
-	return rc;
+	pio_sm_config c = blinker_program_get_default_config(*offset);
+	sm_config_set_set_pins(&c, pin, 1);
+
+	// Load our configuration, and jump to the start of the program
+	pio_sm_init(*pio, *sm, *offset, &c);
+
+	// set the pio divisor
+	pio_sm_set_clkdiv(*pio, *sm, divisor);
+	return 0;
 }
-
-#endif
 
 //-----------------------------------------------------------------------------
 
+#define GPIO_PIN0 16
+#define CLOCK_DIVISOR 65535	// Clock divisor to use, as slow as possible
+
 static int app_main(void) {
 	log_info("%s()", __func__);
+	int rc = 0;
 
-	PIO pio = pio0;
+	PIO pio[3];
+	uint sm[3];
+	uint offset[3];
 
-	// load the program
-	for (uint i = 0; i < count_of(blinker_program_instructions); i++) {
-		pio->instr_mem[i] = blinker_program_instructions[i];
+	rc = setup_pio(&blinker_program, &pio[0], &sm[0], &offset[0], GPIO_PIN0, CLOCK_DIVISOR);
+	if (rc != 0) {
+		goto exit;
 	}
 
-	// setup the clock divider
-	pio->sm[0].clkdiv = (uint32_t) (2.5f * (1 << 16));
+	pio_sm_set_enabled(pio[0], sm[0], true);
 
-	// setup the pin mapping
-	pio->sm[0].pinctrl = (1 << PIO_SM0_PINCTRL_SET_COUNT_LSB) | (0 << PIO_SM0_PINCTRL_SET_BASE_LSB);
-	gpio_set_function(0, pio_get_funcsel(pio));
-
-	// start the state machine
-	hw_set_bits(&pio->ctrl, 1 << (PIO_CTRL_SM_ENABLE_LSB + 0));
-
-	return 0;
+ exit:
+	return rc;
 }
 
 //-----------------------------------------------------------------------------
@@ -84,10 +81,9 @@ int main(void) {
 	}
 
  exit:
-	if (rc != 0) {
-		log_error("rc %d", rc);
-	}
+	log_info("exit rc=%d", rc);
 	while (1) {
+		sleep_ms(250);
 	}
 	return 0;
 }
