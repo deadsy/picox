@@ -13,6 +13,7 @@ set(TARGET_NAME pwm_test)
 
 add_executable(${TARGET_NAME}
     main.c
+    pwm.c
     ${COMMON_PATH}/util.c
     ${COMMON_PATH}/log.c
 )

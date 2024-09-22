@@ -9,51 +9,27 @@ PIO Code Testing and Experiments
 #include "pico/stdio.h"
 #include "hardware/pio.h"
 
+#include "pwm.h"
+
 #define LOG_ENABLE
 #include "log.h"
 
-#include "pwm.pio.h"
-
 //-----------------------------------------------------------------------------
 
-// Write `period` to the input shift register
-static void pio_pwm_set_period(PIO pio, uint sm, uint32_t period) {
-	pio_sm_set_enabled(pio, sm, false);
-	pio_sm_put_blocking(pio, sm, period);
-	pio_sm_exec(pio, sm, pio_encode_pull(false, false));
-	pio_sm_exec(pio, sm, pio_encode_out(pio_isr, 32));
-	pio_sm_set_enabled(pio, sm, true);
-}
+static struct pwm_cfg pwm0_cfg = { pio0, 0, 16, 50.f, 0.1 };
 
-// Write `level` to TX FIFO. State machine will copy this into X.
-static void pio_pwm_set_level(PIO pio, uint sm, uint32_t level) {
-	pio_sm_put_blocking(pio, sm, level);
-}
-
-//-----------------------------------------------------------------------------
-
-#define PWM_PIN 16
+static struct pwm_drv pwm0;
 
 static int app_main(void) {
 	log_info("%s()", __func__);
 	int rc = 0;
 
-	PIO pio = pio0;
-	int sm = 0;
-	uint offset = pio_add_program(pio, &pwm_program);
-	log_info("loaded program at %d", offset);
-
-	pwm_program_init(pio, sm, offset, PWM_PIN);
-	pio_pwm_set_period(pio, sm, (1u << 16) - 1);
-
-	int level = 0;
-	while (true) {
-		log_info("level %d", level);
-		pio_pwm_set_level(pio, sm, level * level);
-		level = (level + 1) % 256;
-		sleep_ms(20);
+	rc = pwm_init(&pwm0, &pwm0_cfg);
+	if (rc != 0) {
+		goto exit;
 	}
 
+ exit:
 	return rc;
 }
 
@@ -72,7 +48,7 @@ int main(void) {
 	}
 
  exit:
-	log_info("exit rc=%d", rc);
+	log_info("exit rc %d", rc);
 	while (1) {
 		sleep_ms(250);
 	}

@@ -76,3 +76,15 @@ void mem_display8(void *ptr, unsigned n) {
 }
 
 //-----------------------------------------------------------------------------
+
+float clamp(float x, float lo, float hi) {
+	if (x < lo) {
+		return lo;
+	}
+	if (x > hi) {
+		return hi;
+	}
+	return x;
+}
+
+//-----------------------------------------------------------------------------
