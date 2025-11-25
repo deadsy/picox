@@ -6,7 +6,9 @@ DL_DIR = $(TOP)/dl
 USR_DIR = $(TOP)/ext/usr
 
 .PHONY: all
-all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu_arm .stamp_gnu_riscv .stamp_pt .stamp_pio
+all: .stamp_sdk .stamp_extras .stamp_examples .stamp_playground .stamp_gnu_arm .stamp_pt .stamp_pio
+
+#.stamp_gnu_riscv
 
 .PHONY: tiny_go
 tiny_go: .stamp_tgo
@@ -24,7 +26,7 @@ clean:
 #------------------------------------------------------------------------------
 # pico sdk
 
-SDK_VER = 2.0.0
+SDK_VER = 2.2.0
 SDK_URL = https://github.com/raspberrypi/pico-sdk/releases/download/$(SDK_VER)/pico-sdk-$(SDK_VER).tar.gz
 SDK_FILE = pico-sdk-$(SDK_VER).tar.gz
 SDK_TGZ = $(DL_DIR)/$(SDK_FILE)
@@ -42,7 +44,7 @@ $(SDK_TGZ):
 #------------------------------------------------------------------------------
 # pico extras
 
-EXTRAS_VER = 2.0.0
+EXTRAS_VER = 2.2.0
 EXTRAS_URL = https://github.com/raspberrypi/pico-extras/archive/refs/tags/sdk-$(EXTRAS_VER).tar.gz
 EXTRAS_FILE = pico-extras-$(EXTRAS_VER).tar.gz
 EXTRAS_TGZ = $(DL_DIR)/$(EXTRAS_FILE)
@@ -60,8 +62,8 @@ $(EXTRAS_TGZ):
 #------------------------------------------------------------------------------
 # pico examples
 
-EXAMPLES_VER = 7e77a0c
-EXAMPLES_URL = https://github.com/raspberrypi/pico-examples/tarball/$(EXAMPLES_VER)
+EXAMPLES_VER = 2.2.0
+EXAMPLES_URL = https://github.com/raspberrypi/pico-examples/archive/refs/tags/sdk-$(EXAMPLES_VER).tar.gz
 EXAMPLES_FILE = pico-examples-$(EXAMPLES_VER).tar.gz
 EXAMPLES_TGZ = $(DL_DIR)/$(EXAMPLES_FILE)
 EXAMPLES_DIR = $(TOP)/ext/examples
@@ -78,8 +80,8 @@ $(EXAMPLES_TGZ):
 #------------------------------------------------------------------------------
 # pico playground
 
-PLAYGROUND_VER = 9930bb0
-PLAYGROUND_URL = https://github.com/raspberrypi/pico-playground/tarball/$(PLAYGROUND_VER)
+PLAYGROUND_VER = 2.2.0
+PLAYGROUND_URL = https://github.com/raspberrypi/pico-playground/archive/refs/tags/sdk-$(PLAYGROUND_VER).tar.gz
 PLAYGROUND_FILE = pico-playground-$(PLAYGROUND_VER).tar.gz
 PLAYGROUND_TGZ = $(DL_DIR)/$(PLAYGROUND_FILE)
 PLAYGROUND_DIR = $(TOP)/ext/playground
@@ -96,7 +98,7 @@ $(PLAYGROUND_TGZ):
 #------------------------------------------------------------------------------
 # gnu arm tools
 
-GNU_ARM_VER = 13.3.rel1
+GNU_ARM_VER = 14.3.rel1
 GNU_ARM_URL = https://developer.arm.com/-/media/Files/downloads/gnu/$(GNU_ARM_VER)/binrel/arm-gnu-toolchain-$(GNU_ARM_VER)-x86_64-arm-none-eabi.tar.xz
 GNU_ARM_FILE = arm-gnu-toolchain-$(GNU_ARM_VER)-x86_64-arm-none-eabi.tar.xz
 GNU_ARM_TXZ = $(DL_DIR)/$(GNU_ARM_FILE)
@@ -130,7 +132,7 @@ $(GNU_RISCV_TGZ):
 #------------------------------------------------------------------------------
 # picotool
 
-PT_VER = 2.0.0
+PT_VER = 2.2.0-a4
 PT_URL = https://github.com/raspberrypi/picotool/releases/download/$(PT_VER)/picotool-$(PT_VER).tar.gz
 PT_FILE = picotool-$(PT_VER).tar.gz
 PT_TGZ = $(DL_DIR)/$(PT_FILE)
@@ -155,7 +157,7 @@ $(PT_TGZ):
 #------------------------------------------------------------------------------
 # tinyusb (extract to sdk directory)
 
-USB_VER = 4232642
+USB_VER = 86ad6e5
 USB_URL = https://github.com/hathach/tinyusb/tarball/$(USB_VER)
 USB_FILE = tinyusb-$(USB_VER).tar.gz
 USB_TGZ = $(DL_DIR)/$(USB_FILE)
@@ -173,7 +175,7 @@ $(USB_TGZ):
 #------------------------------------------------------------------------------
 # mbed tls (extract to sdk directory)
 
-TLS_VER = 5a764e5
+TLS_VER = 107ea89
 TLS_URL = https://github.com/Mbed-TLS/mbedtls/tarball/$(TLS_VER)
 TLS_FILE = mbedtls-$(TLS_VER).tar.gz
 TLS_TGZ = $(DL_DIR)/$(TLS_FILE)
@@ -191,7 +193,7 @@ $(TLS_TGZ):
 #------------------------------------------------------------------------------
 # lwip (extract to sdk directory)
 
-LWIP_VER = 0a0452b
+LWIP_VER = 77dcd25
 LWIP_URL = https://github.com/lwip-tcpip/lwip/tarball/$(LWIP_VER)
 LWIP_FILE = lwip-$(LWIP_VER).tar.gz
 LWIP_TGZ = $(DL_DIR)/$(LWIP_FILE)
@@ -209,7 +211,7 @@ $(LWIP_TGZ):
 #------------------------------------------------------------------------------
 # btstack (extract to sdk directory)
 
-BT_VER = 2b49e57
+BT_VER = 501e6d2
 BT_URL = https://github.com/bluekitchen/btstack/tarball/$(BT_VER)
 BT_FILE = btstack-$(BT_VER).tar.gz
 BT_TGZ = $(DL_DIR)/$(BT_FILE)
@@ -227,7 +229,7 @@ $(BT_TGZ):
 #------------------------------------------------------------------------------
 # cyw43 driver (extract to sdk directory)
 
-CYW_VER = faf3638
+CYW_VER = dd75682
 CYW_URL = https://github.com/georgerobotics/cyw43-driver/tarball/$(CYW_VER)
 CYW_FILE = cyw43-driver-$(CYW_VER).tar.gz
 CYW_TGZ = $(DL_DIR)/$(CYW_FILE)
@@ -251,6 +253,7 @@ PIO_BUILD = $(SDK_DIR)/build
 .stamp_pio: .stamp_sdk
 	cmake -GNinja \
 		-DCMAKE_INSTALL_PREFIX=$(USR_DIR) \
+		-DPIOASM_VERSION_STRING="$(SDK_VER)" \
 		-S $(PIO_DIR) -B $(PIO_BUILD)
 	ninja -C $(PIO_BUILD) install
 	touch $@
@@ -258,7 +261,7 @@ PIO_BUILD = $(SDK_DIR)/build
 #------------------------------------------------------------------------------
 # tiny go
 
-TGO_VER = 0.33.0
+TGO_VER = 0.39.0
 TGO_URL = https://github.com/tinygo-org/tinygo/releases/download/v$(TGO_VER)/tinygo_$(TGO_VER)_amd64.deb
 TGO_FILE = tinygo_$(TGO_VER)_amd64.deb
 TGO_DEB = $(DL_DIR)/$(TGO_FILE)

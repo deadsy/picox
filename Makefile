@@ -11,7 +11,6 @@ PIOASM = $(EXT)/usr/lib/cmake/pioasm
 
 BLD_PATH = $(TOP)/build
 
-
 #SRC_PATH = $(TOP)/app0 # blink led, serial output
 #SRC_PATH = $(TOP)/app1 # blink led, serial output, i2s output
 #SRC_PATH = $(TOP)/app2 # tinygo led blinker
