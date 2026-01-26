@@ -98,7 +98,7 @@ $(PLAYGROUND_TGZ):
 #------------------------------------------------------------------------------
 # gnu arm tools
 
-GNU_ARM_VER = 14.3.rel1
+GNU_ARM_VER = 15.2.rel1
 GNU_ARM_URL = https://developer.arm.com/-/media/Files/downloads/gnu/$(GNU_ARM_VER)/binrel/arm-gnu-toolchain-$(GNU_ARM_VER)-x86_64-arm-none-eabi.tar.xz
 GNU_ARM_FILE = arm-gnu-toolchain-$(GNU_ARM_VER)-x86_64-arm-none-eabi.tar.xz
 GNU_ARM_TXZ = $(DL_DIR)/$(GNU_ARM_FILE)
