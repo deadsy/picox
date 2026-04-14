@@ -157,7 +157,8 @@ $(PT_TGZ):
 #------------------------------------------------------------------------------
 # tinyusb (extract to sdk directory)
 
-USB_VER = 331c263
+#USB_VER = 331c263
+USB_VER = 6252448
 USB_URL = https://github.com/hathach/tinyusb/tarball/$(USB_VER)
 USB_FILE = tinyusb-$(USB_VER).tar.gz
 USB_TGZ = $(DL_DIR)/$(USB_FILE)

@@ -99,7 +99,7 @@ static void mem_display8(void *ptr, unsigned n) {
 //-----------------------------------------------------------------------------
 
 static void picoMon(void) {
-	puts("pico mon 1.0");
+	con_puts("pico mon 1.0");
 
 	put_dec(987654321);
 	con_puts("\r\n");
